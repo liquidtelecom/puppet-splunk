@@ -5,9 +5,6 @@
 #
 # == Parameters
 #
-# Specific class parameters
-# [*license_file_source*]
-#   Optional source for the license file, if provided it's added to Splunk
 #
 # [*install*]
 #   Splunk install type:
@@ -194,7 +191,6 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class splunk (
-  $license_file_source = params_lookup('license_file_source'),
   $install            = params_lookup('install'),
   $install_source     = params_lookup('install_source'),
   $admin_password     = params_lookup('admin_password'),
@@ -206,9 +202,6 @@ class splunk (
   $template_outputs   = params_lookup('template_outputs'),
   $template_server    = params_lookup('template_server'),
   $template_web       = params_lookup('template_web'),
-  $my_class           = params_lookup('my_class'),
-  $source_dir         = params_lookup('source_dir'),
-  $source_dir_purge   = params_lookup('source_dir_purge'),
   $options            = params_lookup('options'),
   $absent             = params_lookup('absent'),
   $disable            = params_lookup('disable'),
@@ -543,46 +536,6 @@ class splunk (
       audit   => $splunk::manage_audit,
     }
   }
-
-  # The whole local splunk configuration directory can be recursively overriden
-  if $splunk::source_dir {
-    file { 'splunk.dir':
-      ensure  => $splunk::manage_directory,
-      path    => $splunk::config_dir,
-      require => Package['splunk'],
-      source  => $splunk::source_dir,
-      recurse => true,
-      purge   => $splunk::bool_source_dir_purge,
-      replace => $splunk::manage_file_replace,
-      audit   => $splunk::manage_audit,
-    }
-  }
-
-  if $license_file_source {
-    exec { 'splunk_add_license':
-      command     => "${splunk::basedir}/bin/splunk add licenses /root/splunk.license",
-      refreshonly => true,
-      before      => Service['splunk'],
-      require     => Exec['splunk_first_time_run'],
-    }
-
-    file { 'splunk_license':
-      ensure => $splunk::manage_file,
-      path   => '/root/splunk.license',
-      mode   => '0750',
-      owner  => 'root',
-      group  => 'root',
-      source => $splunk::license_file_source,
-      before => Service['splunk'] ,
-      notify => Exec['splunk_add_license'],
-    }
-  }
-
-  ### Include custom class if $my_class is set
-  if $splunk::my_class {
-    include $splunk::my_class
-  }
-
 
   ### Provide puppi data, if enabled ( puppi => true )
   if $splunk::bool_puppi == true {
