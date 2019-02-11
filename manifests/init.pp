@@ -520,6 +520,13 @@ class splunk (
       replace => $splunk::manage_file_replace,
       audit   => $splunk::manage_audit,
     }
+  } else {
+    # Set server hostname to FQDN if not applying a template
+    exec { 'splunk_change_hostname':
+      command     => "${splunk::basedir}/bin/splunk set servername $::fqdn} -auth admin:${splunk::admin_password}",
+      refreshonly => true,
+      require     => Service['splunk'],
+    }
   }
 
   if $splunk::template_web and $splunk::template_web != '' {
