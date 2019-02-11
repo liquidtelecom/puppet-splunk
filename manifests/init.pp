@@ -525,13 +525,11 @@ class splunk (
     exec { 'splunk_change_hostname':
       command     => "${splunk::basedir}/bin/splunk set servername $::fqdn} -auth admin:${splunk::admin_password}",
       onlyif => "grep \"serverName = $::fqdn}\" ${splunk::basedir}/etc/system/local/server.conf",
-      require     => Service['splunk'],
       notify  => Service['splunk'],
     }
     exec { 'splunk_change_default_host':
       command     => "${splunk::basedir}/bin/splunk set default-hostname $::fqdn} -auth admin:${splunk::admin_password}",
       onlyif => "grep \"host = $::fqdn}\" ${splunk::basedir}/etc/system/local/inputs.conf",
-      require     => Service['splunk'],
       notify  => Service['splunk'],
     }
   }
