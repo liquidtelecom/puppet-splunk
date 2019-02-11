@@ -524,7 +524,7 @@ class splunk (
     # Set server hostname to FQDN if not applying a template
     exec { 'splunk_change_hostname':
       command     => "${splunk::basedir}/bin/splunk set servername $::fqdn} -auth admin:${splunk::admin_password}",
-      refreshonly => true,
+      onlyif => 'grep "serverName = $::fqdn}" ${splunk::basedir}/etc/system/local/server.conf',
       require     => Service['splunk'],
     }
   }
