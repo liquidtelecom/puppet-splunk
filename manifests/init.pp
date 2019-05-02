@@ -334,7 +334,7 @@ class splunk (
   # depending on the OS.  This is more idempotent than the old way of writing a
   # script and only installing the package if the script changes.
 
-  file { [ $splunk::basedir:
+  file { $splunk::basedir:
     ensure => $splunk::manage_directory,
   }
 
@@ -353,7 +353,7 @@ class splunk (
       }
     }
 
-    file { [ "${splunk::basedir}/bin"]:
+    file { "${splunk::basedir}/bin":
       ensure => $splunk::manage_directory,
       owner  => $splunk::config_file_owner,
       group  => $splunk::config_file_group,
@@ -523,18 +523,6 @@ class splunk (
       content => template($splunk::template_server),
       replace => $splunk::manage_file_replace,
       audit   => $splunk::manage_audit,
-    }
-  } else {
-    # Set server hostname to FQDN if not applying a template
-    exec { 'splunk_change_hostname':
-      command     => "${splunk::basedir}/bin/splunk set servername $::fqdn -auth admin:${splunk::admin_password}",
-      unless => "grep \"serverName = $::fqdn\" ${splunk::basedir}/etc/system/local/server.conf",
-      notify  => Service['splunk'],
-    }
-    exec { 'splunk_change_default_host':
-      command     => "${splunk::basedir}/bin/splunk set default-hostname $::fqdn -auth admin:${splunk::admin_password}",
-      unless => "grep \"host = $::fqdn\" ${splunk::basedir}/etc/system/local/inputs.conf",
-      notify  => Service['splunk'],
     }
   }
 
