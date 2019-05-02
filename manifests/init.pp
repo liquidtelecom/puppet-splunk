@@ -524,6 +524,18 @@ class splunk (
       replace => $splunk::manage_file_replace,
       audit   => $splunk::manage_audit,
     }
+  } else {
+    # Set server hostname to FQDN if not applying a template
+    exec { 'splunk_change_hostname':
+      command     => "${splunk::basedir}/bin/splunk set servername $::fqdn -auth admin:${splunk::admin_password}",
+      unless => "grep \"serverName = $::fqdn\" ${splunk::basedir}/etc/system/local/server.conf",
+      notify  => Service['splunk'],
+    }
+    exec { 'splunk_change_default_host':
+      command     => "${splunk::basedir}/bin/splunk set default-hostname $::fqdn -auth admin:${splunk::admin_password}",
+      unless => "grep \"host = $::fqdn\" ${splunk::basedir}/etc/system/local/inputs.conf",
+      notify  => Service['splunk'],
+    }
   }
 
   if $splunk::template_web and $splunk::template_web != '' {
