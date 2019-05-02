@@ -334,6 +334,10 @@ class splunk (
   # depending on the OS.  This is more idempotent than the old way of writing a
   # script and only installing the package if the script changes.
 
+  file { [ $splunk::basedir:
+    ensure => $splunk::manage_directory,
+  }
+
   if $splunk::install_source != '' {
     case $::operatingsystem {
       /(?i:Debian|Ubuntu|Mint)/: {
@@ -349,7 +353,7 @@ class splunk (
       }
     }
 
-    file { [ $splunk::basedir, "${splunk::basedir}/bin"]:
+    file { [ "${splunk::basedir}/bin"]:
       ensure => $splunk::manage_directory,
       owner  => $splunk::config_file_owner,
       group  => $splunk::config_file_group,
