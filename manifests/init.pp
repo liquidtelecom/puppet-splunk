@@ -232,6 +232,11 @@ class splunk (
     server    => '/opt/splunk',
     forwarder => '/opt/splunkforwarder',
   }
+  
+  $servicename = $splunk::install ? {
+    server    => 'splunk',
+    forwarder => 'SplunkForwarder',
+  }
 
   $package = $splunk::basename
   $service = 'splunk'
