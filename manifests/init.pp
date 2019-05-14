@@ -398,7 +398,7 @@ class splunk (
 
   service { 'splunk':
     ensure    => $splunk::manage_service_ensure,
-    name      => $splunk::service,
+    name      => $servicename,
     enable    => $splunk::manage_service_enable,
     hasstatus => $splunk::service_status,
     pattern   => $splunk::process,
