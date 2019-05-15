@@ -233,7 +233,7 @@ class splunk (
     forwarder => '/opt/splunkforwarder',
   }
   
-	if ( $facts['os']['name'] == 'Ubuntu' and $facts['os']['release']['major'] > 16)  {
+	if ( $facts['os']['name'] == 'Ubuntu' and $facts['os']['release']['major'] == '18.04')  {
 	    $servicename = $splunk::install ? {
 	      server    => 'splunk',
 	      forwarder => 'SplunkForwarder',
