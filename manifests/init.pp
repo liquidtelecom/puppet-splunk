@@ -241,7 +241,7 @@ class splunk (
 	} else {
 		$servicename = $splunk::install ? {
 		  	server    => 'splunk',
-	   		forwarder => 'SplunkForwarder',
+	   		forwarder => 'splunk',
 	   	}
 	}
 	
