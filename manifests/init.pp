@@ -238,7 +238,13 @@ class splunk (
 	      server    => 'splunk',
 	      forwarder => 'SplunkForwarder',
 	    }
-	} else {
+	} elsif ( $facts['os']['name'] == 'CentOS' and $facts['os']['release']['major'] == '7')  {
+	    $servicename = $splunk::install ? {
+	      server    => 'splunk',
+	      forwarder => 'SplunkForwarder',
+	    }
+	} 
+	else {
 		$servicename = $splunk::install ? {
 		  	server    => 'splunk',
 	   		forwarder => 'splunk',
