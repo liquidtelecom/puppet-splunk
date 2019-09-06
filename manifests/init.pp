@@ -235,7 +235,7 @@ class splunk (
   
 	if ( $facts['os']['name'] == 'Ubuntu' and $facts['os']['release']['major'] == '18.04')  {
 	    $servicename = $splunk::install ? {
-	      server    => 'splunkd',
+	      server    => 'Splunkd',
 	      forwarder => 'SplunkForwarder',
 	    }
 	} elsif ( $facts['os']['name'] == 'CentOS' and $facts['os']['release']['major'] == '7')  {
