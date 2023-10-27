@@ -412,11 +412,16 @@ class splunk (
   }
 
   service { 'splunk':
+    provider => 'base',
     ensure    => $splunk::manage_service_ensure,
     name      => $servicename,
     enable    => $splunk::manage_service_enable,
     hasstatus => $splunk::service_status,
     pattern   => $splunk::process,
+    start   => "${basedir}/bin/splunk start",
+    stop   => "${basedir}/bin/splunk stop",
+    restart   => "${basedir}/bin/splunk restart",
+    status   => "${basedir}/bin/splunk status",
     require   => Exec['splunk_first_time_run'],
   }
 
