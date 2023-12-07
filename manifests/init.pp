@@ -422,7 +422,7 @@ class splunk (
     stop   => "${basedir}/bin/splunk stop",
     restart   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt restart",
     status   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt status",
-    require   => Exec['splunk_first_time_run'],
+    #require   => Exec['splunk_first_time_run'],
   }
 
   # When the package is installed or upgraded the first time run flag is set by
@@ -430,7 +430,7 @@ class splunk (
   # service again, accept the license and run any migration scripts that are
   # needed all in one shot.
   exec { 'splunk_first_time_run':
-    command   => "${splunk::basedir}/bin/splunk --accept-license --answer-yes --no-prompt",
+    command   => "${splunk::basedir}/bin/splunk --accept-license --answer-yes --no-prompt enable boot-start",
     require   => Package['splunk'],
     onlyif    => "/usr/bin/test -f ${splunk::basedir}/ftr",
   }
