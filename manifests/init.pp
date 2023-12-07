@@ -417,11 +417,11 @@ class splunk (
     name      => $servicename,
     enable    => $splunk::manage_service_enable,
     hasstatus => false,
-    #pattern   => $splunk::process,
+    pattern   => $splunk::process,
     start   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt start ",
     stop   => "${basedir}/bin/splunk stop",
     restart   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt restart",
-    status   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt status",
+    #status   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt status",
     require   => Exec['splunk_first_time_run'],
   }
 
