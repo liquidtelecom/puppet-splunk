@@ -418,10 +418,10 @@ class splunk (
     enable    => $splunk::manage_service_enable,
     hasstatus => $splunk::service_status,
     pattern   => $splunk::process,
-    start   => "${basedir}/bin/splunk start",
+    start   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt start ",
     stop   => "${basedir}/bin/splunk stop",
-    restart   => "${basedir}/bin/splunk restart",
-    status   => "${basedir}/bin/splunk status",
+    restart   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt restart",
+    status   => "${basedir}/bin/splunk --accept-license --answer-yes --no-prompt status",
     require   => Exec['splunk_first_time_run'],
   }
 
@@ -430,7 +430,7 @@ class splunk (
   # service again, accept the license and run any migration scripts that are
   # needed all in one shot.
   exec { 'splunk_first_time_run':
-    command   => "${splunk::basedir}/bin/splunk --accept-license enable boot-start --answer-yes --no-prompt",
+    command   => "${splunk::basedir}/bin/splunk --accept-license --answer-yes --no-prompt",
     require   => Package['splunk'],
     onlyif    => "/usr/bin/test -f ${splunk::basedir}/ftr",
   }
