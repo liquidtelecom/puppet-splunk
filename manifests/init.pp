@@ -118,18 +118,6 @@
 #   Can be defined also by the (top scope) variables $splunk_monitor_target
 #   and $monitor_target
 #
-# [*puppi*]
-#   Set to 'true' to enable creation of module data files that are used by puppi
-#   Can be defined also by the (top scope) variables $splunk_puppi and $puppi
-#
-# [*puppi_helper*]
-#   Specify the helper to use for puppi commands. The default for this module
-#   is specified in params.pp and is generally a good choice.
-#   You can customize the output of puppi commands for this module using another
-#   puppi helper. Use the define puppi::helper to create a new custom helper
-#   Can be defined also by the (top scope) variables $splunk_puppi_helper
-#   and $puppi_helper
-#
 # [*firewall*]
 #   Set to 'true' to enable firewalling of the services provided by the module
 #   Can be defined also by the (top scope) variables $splunk_firewall
@@ -164,13 +152,13 @@
 #
 # [*port*]
 #   The listening port, if any, of the service.
-#   This is used by monitor, firewall and puppi (optional) components
+#   This is used by monitor and firewall components
 #   Note: This doesn't necessarily affect the service configuration file
 #   Can be defined also by the (top scope) variable $splunk_port
 #
 # [*protocol*]
 #   The protocol used by the the service.
-#   This is used by monitor, firewall and puppi (optional) components
+#   This is used by monitor and firewall components
 #   Can be defined also by the (top scope) variable $splunk_protocol
 #
 # [*version*]
@@ -209,8 +197,6 @@ class splunk (
   $monitor            = params_lookup( 'monitor' , 'global' ),
   $monitor_tool       = params_lookup( 'monitor_tool' , 'global' ),
   $monitor_target     = params_lookup( 'monitor_target' , 'global' ),
-  $puppi              = params_lookup( 'puppi' , 'global' ),
-  $puppi_helper       = params_lookup( 'puppi_helper' , 'global' ),
   $firewall           = params_lookup( 'firewall' , 'global' ),
   $firewall_tool      = params_lookup( 'firewall_tool' , 'global' ),
   $firewall_src       = params_lookup( 'firewall_src' , 'global' ),
@@ -271,7 +257,6 @@ class splunk (
   $bool_absent=any2bool($absent)
   $bool_disable=any2bool($disable)
   $bool_disableboot=any2bool($disableboot)
-  $bool_puppi=any2bool($puppi)
   $bool_monitor=any2bool($monitor)
   $bool_firewall=any2bool($firewall)
   $bool_audit_only=any2bool($audit_only)
@@ -550,17 +535,6 @@ class splunk (
       audit   => $splunk::manage_audit,
     }
   }
-
-  ### Provide puppi data, if enabled ( puppi => true )
-  if $splunk::bool_puppi == true {
-    $classvars=get_class_args()
-    puppi::ze { 'splunk':
-      ensure    => $splunk::manage_file,
-      variables => $classvars,
-      helper    => $splunk::puppi_helper,
-    }
-  }
-
 
   ### Service monitoring, if enabled ( monitor => true )
   if $splunk::bool_monitor == true {

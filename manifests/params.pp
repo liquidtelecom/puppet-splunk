@@ -65,8 +65,7 @@ class splunk::params {
   $firewall_tool = ''
   $firewall_src = '0.0.0.0/0'
   $firewall_dst = $facts['networking']['ip']
-  $puppi = false
-  $puppi_helper = 'standard'
+
   $debug = false
   $audit_only = false
 
