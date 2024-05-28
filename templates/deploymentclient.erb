@@ -1,5 +1,5 @@
 [deployment-client]
-clientName = <%= @networking.fqdn %>
+clientName = <%= @facts['networking']['fqdn'] %>
 
 [target-broker:deploymentServer]
 targetUri = <%= @deployment_server %>
