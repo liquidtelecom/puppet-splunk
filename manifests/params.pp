@@ -60,11 +60,11 @@ class splunk::params {
 
   $monitor = false
   $monitor_tool = ''
-  $monitor_target = $::ipaddress
+  $monitor_target = $facts['networking']['ip']
   $firewall = false
   $firewall_tool = ''
   $firewall_src = '0.0.0.0/0'
-  $firewall_dst = $::ipaddress
+  $firewall_dst = $facts['networking']['ip']
   $puppi = false
   $puppi_helper = 'standard'
   $debug = false

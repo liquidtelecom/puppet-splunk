@@ -359,7 +359,7 @@ class splunk (
   }
 
   if $splunk::install_source != '' {
-    case $::operatingsystem {
+    case $facts['os']['name'] {
       /(?i:Debian|Ubuntu|Mint)/: {
         $package_filename = "puppet-splunk-${splunk::version}.deb"
         $package_provider = 'dpkg'
@@ -369,7 +369,7 @@ class splunk (
         $package_provider = 'rpm'
       }
       default: {
-        fail("The ${::operatingsystem} operating system isn't supported with remote install source")
+        fail("The ${facts['os']['name']} operating system isn't supported with remote install source")
       }
     }
 
